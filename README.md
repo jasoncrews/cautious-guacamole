@@ -1,4 +1,3 @@
-# cautious-guacamole
 # StarterPack V3 Azure DevOps Planning Pack
 
 A reusable Claude Code pack for turning requirements into well-structured Azure DevOps backlogs on **IU StarterPack V3** projects (styled with the **Rivet** design system). Drop the `.claude/` folder into the root of any StarterPack repo.
