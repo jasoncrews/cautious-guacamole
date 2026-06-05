@@ -1,8 +1,8 @@
 ---
-description: Triage tool-candidates.jsonl for the periodic tool-extraction review.
+description: Triage tool-candidates.jsonl for the weekly tool-extraction review.
 ---
 
-Read `.claude/agents/tool-candidates.jsonl` (relative to the repo root). If the file is empty, say so and stop.
+Read `.claude/agents/tool-candidates.jsonl`. If the file is empty, say so and stop.
 
 For each record, classify as one of: `promote`, `keep-watching`, `drop`.
 

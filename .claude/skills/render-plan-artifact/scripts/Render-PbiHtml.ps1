@@ -60,6 +60,17 @@ function Format-FileTargets {
     return "<ul>`n$li`n</ul>"
 }
 
+function Format-Entities {
+    param([object[]]$Entities)
+    if (-not (Test-HasContent $Entities)) { return '' }
+    $blocks = ($Entities | ForEach-Object {
+            $name = ConvertTo-HtmlText $_.name
+            $def = ConvertTo-HtmlText $_.definition
+            "<p><em>$name</em></p>`n<pre><code>$def</code></pre>"
+        }) -join "`n"
+    return $blocks
+}
+
 try {
     $plan = $PlanJson | ConvertFrom-Json -ErrorAction Stop
 }
@@ -87,6 +98,11 @@ foreach ($pbi in $pbis) {
         $val = Get-OptionalProp $ds 'developer_context_and_goals'
         if (Test-HasContent $val) {
             $sections.Add((Format-Section 'Developer Context & Goals' (Format-BulletList $val))) | Out-Null
+        }
+
+        $val = Get-OptionalProp $ds 'entities'
+        if (Test-HasContent $val) {
+            $sections.Add((Format-Section 'New Entities' (Format-Entities $val))) | Out-Null
         }
 
         $val = Get-OptionalProp $ds 'file_targets'
@@ -122,6 +138,11 @@ foreach ($pbi in $pbis) {
         $val = Get-OptionalProp $ds 'security'
         if (Test-HasContent $val) {
             $sections.Add((Format-Section 'Security' (Format-BulletList $val))) | Out-Null
+        }
+
+        $val = Get-OptionalProp $ds 'gherkin_scenarios'
+        if (Test-HasContent $val) {
+            $sections.Add((Format-Section 'Acceptance Scenarios (Gherkin)' (Format-CodeBlock $val))) | Out-Null
         }
 
         $val = Get-OptionalProp $ds 'testing'

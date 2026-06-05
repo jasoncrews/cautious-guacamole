@@ -1,6 +1,6 @@
 ---
 name: render-plan-artifact
-description: This skill should be used when the vincent agent is in Phase 2 and needs to render Plan Artifact PBIs into Azure DevOps work-item HTML for System.Description and Microsoft.VSTS.Common.AcceptanceCriteria before calling wit_create_work_item. Takes a full Plan Artifact JSON object and returns rendered HTML per PBI.
+description: This skill should be used when the azure-devops-business-analyst is in Phase 2 and needs to render Plan Artifact PBIs into Azure DevOps work-item HTML for System.Description and Microsoft.VSTS.Common.AcceptanceCriteria before calling wit_create_work_item. Takes a full Plan Artifact JSON object and returns rendered HTML per PBI.
 disable-model-invocation: true
 allowed-tools: PowerShell
 ---
@@ -33,13 +33,10 @@ Source strings in the Plan Artifact are RAW — not pre-escaped. The script HTML
 
 ## Invariants the script enforces
 
-- Acceptance criteria appear ONLY in `acceptance_criteria_html`, never in `description_html`.
+- The plain-language acceptance-criteria bullets (`acceptance_criteria`) appear ONLY in `acceptance_criteria_html`, never in `description_html`. Gherkin acceptance *scenarios* are a separate, intentional Description section (`gherkin_scenarios`) and do NOT violate this — they are not the plain bullet list.
 - All user-supplied values are HTML-escaped (`&` → `&amp;`, `<` → `&lt;`, `>` → `&gt;`).
 - Sections absent or empty in `description_sections` are omitted entirely (no empty headings).
-- Code blocks render as `<pre><code>…</code></pre>` with their contents escaped.
+- Code blocks render as `<pre><code>…</code></pre>` with their contents escaped. `gherkin_scenarios` and each entity `definition` render as code blocks.
+- `entities` renders under a "New Entities" heading, one labeled `<pre><code>…</code></pre>` per entity (entity `name` in `<em>`, all fields in the block).
 - Bullet lists render as `<ul><li>…</li></ul>`, one `<li>` per array element.
-- Section order in the description follows: user_story → developer_context_and_goals → file_targets → controller_signatures → sample_request_response → error_response_contract → idempotency → conflict_handling → security → testing → docs_and_swagger.
-
-## Child task descriptions
-
-The skill does NOT render task descriptions. Render those manually as a short `<ul><li>…</li></ul>` from `description_bullets`, HTML-escaping each item. Tasks are too short to warrant a skill round-trip.
+- Section order in the description follows: user_story → developer_context_and_goals → entities → file_targets → controller_signatures → sample_request_response → error_response_contract → idempotency → conflict_handling → security → gherkin_scenarios → testing → docs_and_swagger.

@@ -1,75 +1,48 @@
 ---
-description: Plan a legacy-module replication as Azure DevOps PBIs + parent Feature, following the StarterPack V3 CRUD guide
+description: Plan a legacy-module replication as a parent-linked Feature → increasing-complexity PBIs in Azure DevOps, following the StarterPack V3 CRUD guide
 argument-hint: <module-name> <legacy-repo-path>
 ---
 
-Please make a plan to replicate the **{first argument}** of this old project **{remaining arguments — absolute path}** in this project. Create the steps in the style of product backlog items that increase in complexity, starting with just creating the base area with CRUD functionality, then adding features with each PBI. Follow the StarterPack V3 CRUD guide as the reference:
+Replicate the legacy module **{first argument}** (legacy source at **{remaining arguments — absolute path}**) into this repo as a reviewed, parent-linked **Feature → PBI** backlog in Azure DevOps. This is a legacy-aware specialization of `/decompose`: it adds a legacy-exploration pass up front, then runs the **same** `azure-devops-business-analyst` (optimizer) ↔ `plan-reviewer` (evaluator) loop and the **same** creation rules. Project defaults to `<your-azure-devops-project>`.
 
-https://uisapp2.iu.edu/confluence-prd/spaces/EAS/pages/755697093/Creating+StarterPack+V3+CRUD
+If either the module name or the legacy repo path is missing, ask for it before continuing.
 
-Permissions are role/group based — use the standard StarterPack approach (policies declared centrally, e.g. `Permissions.cs`, gated via `[Authorize(Policy = "...")]`). Nothing custom.
+You are the orchestrator and run in the main loop. Keep the user in the loop at the two human gates. Delegate the heavy lifting (exploration, drafting, review, creation) to the agents — don't hand-author work items yourself.
 
-Where lookup/control tables would normally exist, prefer **constants files in the shared project** (the `*.Shared` project, mirroring the StarterPack constants pattern) over DB-backed lookup entities, to reduce administrative work. Use real entities only when the data has a live source (e.g. an upstream integration feed) or churns frequently enough to warrant a maintenance UI — flag any borderline cases.
+## Hard rules (non-negotiable — identical to `/decompose`)
+- **Human-only approval.** The Feature and every PBI are created in **New**. NEVER set any work item to Approved or any other state.
+- **No tasks, no effort.** Never create child Tasks or set story points / hours at any level. (Task breakdown is the sprint-planning / `/implement-pbi` fallback, not authoring.)
+- **PBIs are Markdown** via the `render-plan-artifact-markdown` skill; the Feature is a small hand-authored Markdown body per `.claude/templates/feature-epic-template.md`.
+- **Parent-link with `wit_work_items_link` (`type: "parent"`), parent created before child.** NEVER `wit_add_child_work_items` (it can't set the AcceptanceCriteria field, tags, or the rendered Markdown body).
 
-For any UI, follow the **Rivet** design system — specify Rivet components and utility classes rather than custom markup/CSS (look them up via the `rivet-design-system` MCP tools if available).
+## Legacy-specific guidance (fold into the plan)
+- **Follow the StarterPack V3 CRUD guide:** https://uisapp2.iu.edu/confluence-prd/spaces/EAS/pages/755697093/Creating+StarterPack+V3+CRUD — if it's unreachable (on-prem Confluence / auth-gated), fall back to the **`StarterPack3`** reference repo (project `EA-StarterPack3`) via the Azure DevOps MCP, and to the closest existing CRUD module in your own repo.
+- **Permissions are role/group based** — standard StarterPack approach (policies in the UI projects' `Permissions.cs`, gated via `[Authorize(Policy = "...")]`). Nothing custom.
+- **Prefer constants over lookup tables.** Where the legacy app uses lookup/control tables, prefer **constants files** in `<App>.Shared` (mirroring an existing `*Constants.cs`) to reduce admin work. Use a real entity only when the data has a live source (e.g. backed by an external/federated data integration) or churns often enough to warrant a maintenance UI — flag any borderline cases as open questions.
 
-After the plan is approved, add a Feature in Azure DevOps for this and link the PBIs to it. **Use HTML format for every work item description (both the Feature and all child PBIs).**
+## 1. Explore the legacy module (then confirm scope — human gate 1)
+Invoke `sp3-legacy-explorer` via the Task tool with the module name + legacy repo path. It returns a verification-tagged Markdown summary of the legacy pages, entities (candidate keys / FKs), business logic, and workflows, plus the recommended StarterPack3 analog and SP3 deltas — without dumping file contents. (For a large module, you may fan out one `sp3-legacy-explorer` per sub-area in parallel.)
 
----
+Show the user: the legacy summary, the proposed **decomposition target** (`new-feature` — a Feature parenting the PBIs), and the proposed PBI sequence (see below). Confirm scope before drafting. Ask 2–3 targeted questions if scope/level is unclear.
 
-**Arguments:** $ARGUMENTS
+## 2. Decompose, review, and create (delegate to the BA)
+Invoke `azure-devops-business-analyst` via the Task tool. Pass it: the legacy-explorer summary, the project, `decomposition_target.mode = "new-feature"`, and the legacy-specific guidance above. The BA will:
+- draft a **hierarchical Plan Artifact** — a Feature plus child PBIs that **increase in complexity**, applying the foundation-first vertical-slice heuristic:
+  - **PBI 1 (foundation, `build_order: 1`):** base area scaffold + core CRUD + data model (all FK children) + one migration + seed.
+  - **PBI 2+:** each adds one logical capability (lookup constants, online submission UI, junction tables, attachments, workflow, notifications, claims / sub-modules, search / export, …), independently shippable where possible.
+  - aggregating / dashboard PBIs last.
+- run the `plan-reviewer` loop (max 2 revision cycles) for hierarchy integrity + decomposition quality,
+- and, **after the user approves creation (human gate 2)**, create the Feature + PBIs parent-before-child in **New**, parent-linked, in build order, rendering PBIs via `render-plan-artifact-markdown`, and write the backlog guidance doc to `Data/Plans/feature-<id>-<slug>-backlog.md`.
 
-If either the module name or the legacy repo path is missing, ask the user to supply it before continuing.
+Relay the BA's outcome:
+- **Approved & created** → show the tree (ids, titles, links, build order). Note everything is in **New** awaiting human approval.
+- **Failed to converge / rejected** → present the BA's summary + reviewer findings and stop. Ask how to proceed.
 
-## How to execute
+Resilience: if the BA reports it could not invoke `plan-reviewer` itself (nested-subagent limitation), drive the loop yourself — take the BA's draft, invoke `plan-reviewer` via the Task tool, hand the verdict back for revision, repeat up to 2 cycles — then return to the BA for Phase-2 creation after the user approves.
 
-1. **Explore the legacy module** at the given path — summarize its pages, business logic, entities, and workflows. Don't dump file contents.
-2. **Fetch the StarterPack V3 CRUD guide** (link above). If it's unreachable (on-prem Confluence, auth-gated), fall back to using the target StarterPack repo itself as the reference — find the closest existing CRUD module and mirror its structure.
-3. **Draft the PBI plan**:
-   - PBI 1: base area scaffold + core CRUD only.
-   - PBI 2+: each adds one logical capability (lookup constants, online submission UI, junction tables, attachments, workflow, notifications, claims/sub-modules, search/export, etc.).
-   - Each PBI should be independently shippable when possible.
-   - For each PBI include title, short description, scope bullets, and any non-obvious dependencies.
-4. **Confirm with the user** before creating any work items.
-5. **On approval**, create the work items via the `wit_*` MCP tools. Ask the user for the target Azure DevOps project (and area/iteration if relevant) if it isn't already known — do not assume a project name.
+## 3. Report
+Summarize: the created Feature + PBI ids and links, the hierarchy tree, the build order, the backlog doc path, and any open questions (especially constants-vs-entity calls flagged in step 1). Remind the user that **nothing is Approved** — they review/improve in Azure DevOps and approve; an Approved PBI (starting with the foundation) then flows into `/implement-pbi`.
 
-## HTML formatting requirements (don't skip — the format flag is easy to miss)
-
-Each work item description **must** end up with `multilineFieldsFormat.System.Description = "html"` and contain real HTML tags (`<h2>`, `<p>`, `<ul>`, `<li>`, `<code>`, `<strong>`).
-
-### Creating the parent Feature
-Use `wit_create_work_item` and pass `format: "Html"` **inside the field object** for `System.Description`:
-
-```json
-{
-  "name": "System.Description",
-  "format": "Html",
-  "value": "<h2>Overview</h2>..."
-}
-```
-
-### Creating child PBIs
-`wit_add_child_work_items` accepts `format` **per item, NOT at the top level.** Each entry in the `items` array must include `"format": "Html"`. Putting it at the top level (next to `items`) is silently ignored and the PBIs end up as markdown.
-
-```json
-{
-  "parentId": <featureId>,
-  "workItemType": "Product Backlog Item",
-  "items": [
-    { "title": "...", "description": "<h2>Goal</h2>...", "format": "Html" },
-    ...
-  ]
-}
-```
-
-### Verifying
-After creation, check the response: each work item's `multilineFieldsFormat.System.Description` should be `"html"`. If any came back as `"markdown"`, fix with `wit_update_work_item` using **two patch operations** in a single call:
-
-```json
-[
-  { "op": "replace", "path": "/multilineFieldsFormat/System.Description", "value": "html" },
-  { "op": "replace", "path": "/fields/System.Description", "value": "<h2>...</h2>..." }
-]
-```
-
-Both ops are required — the format-path patch alone won't change a markdown body to HTML rendering, and the field-value patch alone won't flip the format flag.
+## Notes
+- Two human gates: scope confirmation after legacy exploration (step 1) and the BA's pre-creation approval (step 2). Everything between runs automatically.
+- This is `/decompose` with a legacy-exploration front end and the StarterPack CRUD guidance — same conventions, same Markdown render skill, same parent-linking, same human-only New→Approved.
