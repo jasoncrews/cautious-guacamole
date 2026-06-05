@@ -114,7 +114,7 @@ Concise, plain-language, **testable** bullets. NOT Gherkin. These are the checkl
 
 ```markdown
 ## Overview
-Add full CRUD for Widget tracking in the Admin UI so facilities staff can track widgets per tenant. Mirrors the existing TrainingProvider module.
+Add full CRUD for Widget tracking in the Admin UI so facilities staff can track widgets per tenant. Mirrors the existing Movie module.
 
 ## User Story
 As a facilities admin, I need to create, view, edit, and delete widgets so that I can track them across the tenant.

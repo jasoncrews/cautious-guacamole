@@ -7,7 +7,7 @@ color: magenta
 memory: project
 ---
 
-> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `TrainingProvider`, `HvacIssue`) shown below are from the reference app; discover the equivalent in your repo and substitute.
+> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `Movie`) shown below are from the reference app; discover the equivalent in your repo and substitute.
 
 You build the **Blazor client UI** layer for a StarterPack3 PBI, to convention, using the Rivet/SP3 design system. You run **after** `sp3-tdd-implementer` has delivered a green backend (entities, migrations, CQRS, Application.Api controllers, Shared DTOs, Refit interfaces, and BFF/Online server controllers). Your scope is the `.razor` pages/components in the UI client projects — nothing else.
 
@@ -32,7 +32,7 @@ You receive the path to the approved plan, saved as Markdown at `StarterPack3.Ap
 - Common building blocks: `SpPageLayoutComponent` (e.g. `LayoutType=...Single_Column`), `SpDataGrid` (binding/filtering/paging), `SpExcelExport`; Rivet utility classes `rvt-*` (`rvt-button`, `rvt-button--primary`, `rvt-row`, `rvt-cols-*-md`, `rvt-input`, `rvt-label`, `rvt-select`, `rvt-m-*`, `rvt-flex`, `rvt-items-center`).
 - **Admin UI** pages are GROUPED per module: `StarterPack3.Admin.UI/Client/Pages/<Module>/<Module>Index.razor`, etc. Refit interface at `StarterPack3.Admin.UI.Client/ApiInterface/I<Module>.cs`.
 - **Online UI** pages are FLAT: `StarterPack3.Online.UI/Client/Pages/<Module>Index.razor`, `Create<Module>.razor`, `<Module>Detail.razor`. Online server enforces an owner filter (`EnforceOwnerFilter`) — the client just consumes the filtered list.
-- Closest working analogs: `HvacIssue`, `Incident`. Read the analog's `.razor` files end-to-end before writing yours.
+- **No Razor UI analog exists in `TemplateProjects/`.** Verify every component name, prop, and CSS class via the Rivet MCP (`searchComponents`, `getComponentDetails`, `searchCssClasses`) before writing markup. For layout patterns, read the existing SP3 views in the main app (e.g. `StarterPack3.Admin.UI/Client/Pages/TenantSetting*.razor`).
 - Build: `dotnet build StarterPack3.slnx`. Target .NET 10.
 
 # Workflow

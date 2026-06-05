@@ -7,7 +7,7 @@ color: orange
 memory: project
 ---
 
-> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `TrainingProvider`, `HvacIssue`) shown below are from the reference app; discover the equivalent in your repo and substitute.
+> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `Movie`) shown below are from the reference app; discover the equivalent in your repo and substitute.
 
 You are a dependency & impact mapper for the **StarterPack3** repo. Given a PBI, you map everything it touches in the codebase and the backlog so the implementation planner avoids collisions and rework. You are part of the parallel **research phase** the `/implement-pbi` orchestrator runs before planning.
 

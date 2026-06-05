@@ -4,7 +4,7 @@ The **Agent Pack** is a drop-in Claude Code configuration (`.claude/`) that turn
 
 You drive it with **slash commands**; the commands orchestrate a team of **agents** that draft, review, research, plan, and implement. Drop the `.claude/` folder into the root of any StarterPack V3 repo and the commands light up.
 
-> **SP3 reference source.** The canonical StarterPack V3 reference implementation is the **`StarterPack3`** repo in Azure DevOps project **`EA-StarterPack3`** (https://dev.azure.com/iuait/EA-StarterPack3). The agents fetch real conventions and code examples from that repo via the Azure DevOps MCP rather than assuming. Example paths use the canonical `StarterPack3.*` prefix and reference modules (e.g. `TrainingProvider`, `HvacIssue`); **your app is a `dotnet new StarterPack3` instance with its own project prefix**, so the agents discover it from your local `.slnx`/top-level projects and substitute.
+> **SP3 reference source.** The canonical StarterPack V3 reference implementation is the **`StarterPack3`** repo in Azure DevOps project **`EA-StarterPack3`** (https://dev.azure.com/iuait/EA-StarterPack3). The agents fetch real conventions and code examples from that repo via the Azure DevOps MCP rather than assuming. Example paths use the canonical `StarterPack3.*` prefix and reference modules (e.g. `Movie`); **your app is a `dotnet new StarterPack3` instance with its own project prefix**, so the agents discover it from your local `.slnx`/top-level projects and substitute.
 
 ---
 
