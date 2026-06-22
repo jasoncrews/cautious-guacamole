@@ -2,7 +2,7 @@
 
 How this pack's AI agents, commands, and skills fit together — from a raw idea to reviewed, tested code on a feature branch. Everything under `.claude/` is git-tracked and shipped with the repo, so on pull you have the whole pipeline.
 
-> **SP3 reference source.** Canonical conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3) — fetch real files from it via the Azure DevOps MCP rather than assuming. Example paths below use the `StarterPack3.*` prefix and reference modules (e.g. `TrainingProvider`, `HvacIssue`); **your app is a `dotnet new StarterPack3` instance with its own project prefix** — discover it from your local `.slnx`/top-level projects and substitute. The pipeline *structure* (evaluator-optimizer loops, research fan-out, guardrails) is repo-agnostic.
+> **SP3 reference source.** Canonical conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3) — fetch real files from it via the Azure DevOps MCP rather than assuming. Example paths below use the `StarterPack3.*` prefix and reference modules (e.g. `Movie`); **your app is a `dotnet new StarterPack3` instance with its own project prefix** — discover it from your local `.slnx`/top-level projects and substitute. The pipeline *structure* (evaluator-optimizer loops, research fan-out, guardrails) is repo-agnostic.
 
 > **New here? Read this first, then jump to [End-to-end flow](#end-to-end-flow).** You drive the pipeline with **slash commands**; the commands orchestrate the **agents**.
 

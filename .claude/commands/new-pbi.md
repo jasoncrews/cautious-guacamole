@@ -24,7 +24,7 @@ Then run a short interview to fill every element a standard PBI needs, per `.cla
 - **User story** — `As a <role>, I want <capability> so that <business value>`.
 - **Acceptance criteria** — walk the user through the behavioral expectations and restate them back as plain, testable bullets. Every bullet must map to a Gherkin scenario and vice-versa (the bidirectional coverage the template requires); the BA writes the Gherkin, but confirm the behaviors here.
 - **New entities** (if any) — name + the entity-specific fields, so the BA can produce the `## New Entities` block (`: EntityBase`, explicit `<Entity>Id: Guid` PK, FK ids + navigation properties; audit fields inherited, not relisted).
-- **Context** — parent id (if any), project / area path / iteration, priority, tags, and the analog module to mirror if the user knows one (e.g. `TrainingProvider`/`HvacIssue`/`Incident` for admin CRUD).
+- **Context** — parent id (if any), project / area path / iteration, priority, tags, and the analog module to mirror if the user knows one (e.g. `Movie` for admin CRUD).
 
 Keep it tight — ask only what's missing, don't over-interrogate. Stop once there's enough for an approvable, self-contained PBI.
 

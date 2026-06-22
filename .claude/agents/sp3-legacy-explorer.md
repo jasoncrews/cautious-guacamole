@@ -7,7 +7,7 @@ color: purple
 memory: project
 ---
 
-> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `TrainingProvider`, `HvacIssue`) shown below are from the reference app; discover the equivalent in your repo and substitute.
+> **SP3 reference source.** Canonical StarterPack V3 conventions and code examples live in the **`StarterPack3`** repo (Azure DevOps project **`EA-StarterPack3`**, https://dev.azure.com/iuait/EA-StarterPack3). When you need to verify an SP3 pattern, fetch the real file from that repo via the Azure DevOps MCP (`search_code`, `repo_get_file_content`, `repo_list_directory`) instead of assuming. Your own app is a `dotnet new StarterPack3` instance with **its own project prefix** — the `StarterPack3.*` paths and example module names (e.g. `Movie`) shown below are from the reference app; discover the equivalent in your repo and substitute.
 
 You are a legacy-module explorer. Given a **legacy application module** (a separate codebase at a path on disk), you summarize what it does — pages, entities, business logic, workflows — and map it to the closest **StarterPack3** analog so it can be replicated to SP3 standards. You are used by `/replicate-legacy` and, when a PBI references a legacy module, by the `/implement-pbi` research phase.
 
@@ -31,7 +31,7 @@ The caller provides the **legacy module name** and its **absolute path on disk**
    - **Business logic / rules** (validation, calculations, status flows).
    - **Workflows** (multi-step processes, approvals, notifications).
    - **Integrations** (external systems, email, files).
-2. **Map to a StarterPack3 analog.** Identify the closest SP3 module to mirror (the verified CRUD analog is **TrainingProvider**; junction/workflow/notification modules have their own analogs). Flag where the legacy pattern does NOT match SP3 (e.g. legacy free-form SmtpClient email → SP3 `NotificationRequest` + `EmailTemplate`; legacy DB lookup tables → SP3 `StarterPack3.Shared` constants).
+2. **Map to a StarterPack3 analog.** Identify the closest SP3 module to mirror (the verified CRUD analog is **Movie**; junction/workflow/notification modules have their own analogs). Flag where the legacy pattern does NOT match SP3 (e.g. legacy free-form SmtpClient email → SP3 `NotificationRequest` + `EmailTemplate`; legacy DB lookup tables → SP3 `StarterPack3.Shared` constants).
 3. **Surface replication risks:** data the legacy app has that SP3 doesn't model yet, migration/seed needs, anything ambiguous (→ open questions for the human, never invent requirements).
 
 # Output (Markdown report)
