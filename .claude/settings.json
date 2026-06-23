@@ -1,0 +1,65 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Azure_Devops__core_list_projects",
+      "mcp__Azure_Devops__core_list_project_teams",
+      "mcp__Azure_Devops__repo_list_repos_by_project",
+      "mcp__Azure_Devops__search_code",
+      "mcp__Azure_Devops__repo_list_directory",
+      "mcp__Azure_Devops__repo_get_file_content",
+      "mcp__Azure_Devops__search_workitem",
+      "mcp__Azure_Devops__wit_query_by_wiql",
+      "mcp__Azure_Devops__wit_get_work_item",
+      "mcp__Azure_Devops__wit_get_work_items_batch_by_ids",
+      "mcp__Azure_Devops__wit_get_work_item_type",
+      "mcp__Azure_Devops__wit_create_work_item",
+      "mcp__Azure_Devops__wit_update_work_item",
+      "mcp__Azure_Devops__wit_update_work_items_batch",
+      "mcp__Azure_Devops__wit_work_items_link",
+      "mcp__Azure_Devops__wit_add_work_item_comment",
+      "mcp__Azure_Devops__work_list_iterations",
+      "mcp__Azure_Devops__work_list_team_iterations",
+      "mcp__Azure_Devops__work_get_team_settings",
+      "mcp__Azure_Devops__search_wiki",
+      "mcp__Azure_Devops__wiki_get_page_content",
+      "mcp__claude_ai_rivet-design-system__searchComponents",
+      "mcp__claude_ai_rivet-design-system__getComponentDetails",
+      "mcp__claude_ai_rivet-design-system__listComponentsByCategory",
+      "mcp__claude_ai_rivet-design-system__listComponentCategories",
+      "mcp__claude_ai_rivet-design-system__searchCssClasses",
+      "mcp__claude_ai_rivet-design-system__getCssClassDetails",
+      "mcp__claude_ai_rivet-design-system__listUtilityClassesByCategory",
+      "mcp__claude_ai_rivet-design-system__searchDesignTokens",
+      "PowerShell(git status *)",
+      "PowerShell(git checkout *)",
+      "PowerShell(git branch *)",
+      "PowerShell(git switch *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(dotnet build *)",
+      "PowerShell(dotnet test *)",
+      "PowerShell(dotnet ef *)",
+      "PowerShell(dotnet stryker *)",
+      "PowerShell(dotnet tool install *)",
+      "PowerShell(node *)",
+      "Bash(node *)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "io.github.microsoft/awesome-copilot",
+    "Azure Devops"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous-git.ps1\""
+          }
+        ]
+      }
+    ]
+  }
+}
